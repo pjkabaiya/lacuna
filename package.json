@@ -1,0 +1,8 @@
+{
+  "name": "no-nut-november",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Anonymous No Nut November countdown with live visitors and community quotes",
+  "dependencies": { "mongodb": "^6.8.0" },
+  "engines": { "node": ">=18" }
+}
