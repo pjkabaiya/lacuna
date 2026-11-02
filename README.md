@@ -41,5 +41,8 @@ curl -X POST -H "x-admin-key: YOURKEY" -H "Content-Type: application/json" \
 ```
 Extend the `BLOCKED` word list in `backend/api/quotes.js` as needed.
 
+## Search engine metadata
+The homepage includes a canonical URL, search description, social sharing metadata, structured data, `robots.txt`, and `sitemap.xml` for `https://nonutnovember-sable.vercel.app/`. If the public site URL changes, update the matching URLs in `public/index.html`, `public/robots.txt`, and `public/sitemap.xml`.
+
 ## Ads later
 Apply to AdSense once you have steady traffic, add their script, and use the `#ad` block in `index.html`. Keep `REQUIRE_APPROVAL=true` so user content stays ad-friendly. Add a privacy policy page first.

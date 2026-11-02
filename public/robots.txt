@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nonutnovember-sable.vercel.app/sitemap.xml
