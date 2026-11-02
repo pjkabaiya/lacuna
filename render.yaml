@@ -17,6 +17,6 @@ services:
       - key: ADMIN_KEY
         generateValue: true
       - key: REQUIRE_APPROVAL
-        value: "false"
+        value: "true"
       - key: CORS_ORIGIN
         sync: false

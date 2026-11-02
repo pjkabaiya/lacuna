@@ -5,6 +5,7 @@ Countdown + live visitor count + anonymous community quotes. Frontend in `public
 ## Structure
 - `public/index.html` the whole frontend (countdown, quotes, form, live count)
 - `public/config.js` frontend API base URL
+- `public/admin.html` protected quote moderation page
 - `backend/server.js` Express server, CORS, and health check
 - `backend/api/quotes.js` GET/POST quotes (anonymous names, filter, rate limit)
 - `backend/api/ping.js` heartbeat for the "people here now" counter
@@ -19,7 +20,7 @@ Countdown + live visitor count + anonymous community quotes. Frontend in `public
    - `DB_NAME`: `nonutnovember`
    - `IP_SALT`: a long random secret
    - `ADMIN_KEY`: a long random secret
-   - `REQUIRE_APPROVAL`: `false` (set to `true` to moderate quotes before display)
+   - `REQUIRE_APPROVAL`: `true` to hold submitted quotes for moderation
    - `CORS_ORIGIN`: your static site's exact origin, with no trailing slash
 4. Deploy the service and copy its URL. Set `window.API_BASE` in `public/config.js` to `https://YOUR-SERVICE.onrender.com/api`.
 5. Host the `public/` directory on a static host. Then set `CORS_ORIGIN` in Render to that site's exact URL (for example, `https://your-site.pages.dev`, with no trailing slash) and redeploy/restart the backend.
@@ -30,7 +31,9 @@ The Render free plan sleeps after about 15 minutes of inactivity, so the first r
 Export the environment variables listed above, then run `cd backend && npm install && npm start`. Serve `public/` with any static server. For local use, set `window.API_BASE` in `public/config.js` to `"/api"` if your static server proxies `/api` to the backend, or to the backend's local URL plus `/api`.
 
 ## Moderation
-Set `REQUIRE_APPROVAL=true` to hold new quotes. Then:
+Open `https://your-static-site.example/admin.html` and enter the Render `ADMIN_KEY` to load and approve pending quotes. Keep `REQUIRE_APPROVAL=true` in Render to hold new submissions for review.
+
+The API can also be moderated directly:
 ```
 curl -H "x-admin-key: YOURKEY" "https://yoursite.com/api/admin?status=pending"
 curl -X POST -H "x-admin-key: YOURKEY" -H "Content-Type: application/json" \
