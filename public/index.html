@@ -82,6 +82,7 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
   <footer>Stay strong. Stay focused. One day at a time.</footer>
 </main>
 
+<script src="config.js"></script>
 <script>
 const quotes=[
 ["Discipline is choosing between what you want now and what you want most.","Abraham Lincoln (attrib.)"],
@@ -139,7 +140,7 @@ function showQuote(){
 showQuote();setInterval(showQuote,9000);
 
 // ---- Community: live count, feed, posting ----
-const API="/api";
+const API=window.API_BASE||"/api";
 const adj=["Calm","Brave","Steady","Iron","Quiet","Bold","Focused","Rising"],noun=["Wolf","Falcon","Monk","Oak","Tiger","Comet","Knight","Anchor"];
 const rnd=()=>adj[Math.random()*adj.length|0]+noun[Math.random()*noun.length|0]+(10+Math.random()*90|0);
 $("rnd").onclick=()=>{$("name").value=rnd()};

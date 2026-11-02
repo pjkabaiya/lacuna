@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: no-nut-november-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: DB_NAME
+        value: nonutnovember
+      - key: IP_SALT
+        generateValue: true
+      - key: ADMIN_KEY
+        generateValue: true
+      - key: REQUIRE_APPROVAL
+        value: "false"
+      - key: CORS_ORIGIN
+        sync: false
