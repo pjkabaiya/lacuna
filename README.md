@@ -1,48 +1,90 @@
-# No Nut November
+# lacuna
 
-Countdown + live visitor count + anonymous community quotes. Frontend in `public/`, Express API in `backend/`, data in MongoDB Atlas.
+Lacuna helps absolute beginners learn Python one small piece at a time: read a short note, choose the missing code, type it, and see the pre-authored output. Lessons are static JSON. The app does not execute learner code and does not require an account.
 
-## Structure
-- `public/index.html` the whole frontend (countdown, quotes, form, live count)
-- `public/config.js` frontend API base URL
-- `public/admin.html` protected quote moderation page
-- `backend/server.js` Express server, CORS, and health check
-- `backend/api/quotes.js` GET/POST quotes (anonymous names, filter, rate limit)
-- `backend/api/ping.js` heartbeat for the "people here now" counter
-- `backend/api/admin.js` moderation (approve/delete), protected by `ADMIN_KEY`
-- `backend/lib/db.js` cached MongoDB connection + indexes
+## Project structure
 
-## Deploy the backend on Render
-1. Create a MongoDB Atlas user. In **Network Access**, allow `0.0.0.0/0` because Render's free tier does not provide a fixed IP.
-2. In Render, create a **Web Service** from this repository. Set **Root Directory** to `backend`, **Build Command** to `npm install`, **Start Command** to `npm start`, and **Health Check Path** to `/healthz`. The root `render.yaml` provides these settings as a Blueprint.
-3. In the Render dashboard, set these environment variables:
-   - `MONGODB_URI`: your MongoDB Atlas connection string
-   - `DB_NAME`: `nonutnovember`
-   - `IP_SALT`: a long random secret
-   - `ADMIN_KEY`: a long random secret
-   - `REQUIRE_APPROVAL`: `true` to hold submitted quotes for moderation
-   - `CORS_ORIGIN`: your static site's exact origin, with no trailing slash
-4. Deploy the service and copy its URL. Set `window.API_BASE` in `public/config.js` to `https://YOUR-SERVICE.onrender.com/api`.
-5. Host the `public/` directory on a static host. Then set `CORS_ORIGIN` in Render to that site's exact URL (for example, `https://your-site.pages.dev`, with no trailing slash) and redeploy/restart the backend.
+- `public/index.html`: home page and lesson list
+- `public/lesson.html`: choose-then-type lesson player
+- `public/css/lacuna.css`, `public/js/`: styles, player, local-first storage, API sync, and admin stats
+- `public/lessons/`: lesson JSON files and ordered manifest
+- `public/config.js`: API base URL used by the static frontend
+- `public/admin.html`: password-protected learning difficulty dashboard
+- `backend/server.js`: Express API, CORS allow-list, security headers, and health check
+- `backend/api/`: progress, learning events, and admin stats endpoints
+- `backend/lib/db.js`: cached MongoDB connection and indexes
 
-The Render free plan sleeps after about 15 minutes of inactivity, so the first request after a pause can take 30–60 seconds.
+## Add a lesson
 
-## Run locally
-Export the environment variables listed above, then run `cd backend && npm install && npm start`. Serve `public/` with any static server. For local use, set `window.API_BASE` in `public/config.js` to `"/api"` if your static server proxies `/api` to the backend, or to the backend's local URL plus `/api`.
+1. Add a JSON file in `public/lessons/`, following an existing `py-*.json` file.
+2. Give the lesson a unique kebab-case `id`, and make the filename match it.
+3. Add its `id`, title, summary, order, and language to `public/lessons/index.json`.
+4. Run `cd backend` then `npm run validate:lessons`.
 
-## Moderation
-Open `https://your-static-site.example/admin.html` and enter the Render `ADMIN_KEY` to load and approve pending quotes. Keep `REQUIRE_APPROVAL=true` in Render to hold new submissions for review.
+Each lesson has 6–8 steps. Every step has one idea in its note, a code array whose final line contains `___`, three or four choices, a zero-based `answer` index, a helpful explanation, a `typeMode` (`copy`, `recall`, or `none`), a `typeScope` (`blank` or `line`), and a pre-authored `output`. `finalOutput` is shown only when the learner presses Run. This text is never evaluated as code.
 
-The API can also be moderated directly:
+Keep each step focused on one concept. Use realistic beginner mistakes as distractors and explain each mistake kindly. In `copy` mode, show the selected answer while typing; `recall` hides it; `none` skips the typing prompt. The validator checks the manifest, IDs, step count, blank marker, choices, and required fields.
+
+## Local development
+
+Install the backend dependencies and start the API:
+
+```powershell
+cd backend
+npm install
+$env:MONGODB_URI = "your MongoDB connection string"
+$env:DB_NAME = "lacuna"
+$env:IP_SALT = "a-long-random-secret"
+$env:ADMIN_KEY = "a-different-long-random-secret"
+$env:CORS_ORIGIN = "http://localhost:8000"
+npm start
 ```
-curl -H "x-admin-key: YOURKEY" "https://yoursite.com/api/admin?status=pending"
-curl -X POST -H "x-admin-key: YOURKEY" -H "Content-Type: application/json" \
-  -d '{"id":"QUOTE_ID","action":"approve"}' https://yoursite.com/api/admin
+
+In another terminal, serve `public/` on `http://localhost:8000` with any static file server. `public/config.js` points at the deployed API by default; change `window.API_BASE` to `http://localhost:3000/api` for local API testing. The frontend works without an API: progress is stored on the device and sync failures remain in a retryable offline queue.
+
+Validate lesson content with:
+
+```powershell
+cd backend
+npm run validate:lessons
 ```
-Extend the `BLOCKED` word list in `backend/api/quotes.js` as needed.
 
-## Search engine metadata
-The homepage includes a canonical URL, search description, social sharing metadata, structured data, `robots.txt`, and `sitemap.xml` for `https://nonutnovember-sable.vercel.app/`. If the public site URL changes, update the matching URLs in `public/index.html`, `public/robots.txt`, and `public/sitemap.xml`.
+Run backend tests with `npm test`.
 
-## Ads later
-Apply to AdSense once you have steady traffic, add their script, and use the `#ad` block in `index.html`. Keep `REQUIRE_APPROVAL=true` so user content stays ad-friendly. Add a privacy policy page first.
+## Environment variables
+
+Copy `backend/.env.example` to a local `.env` file or set these variables in the hosting dashboard:
+
+- `MONGODB_URI`: MongoDB connection string
+- `DB_NAME`: use `lacuna` (the API defaults to this)
+- `IP_SALT`: long random secret used to hash request IPs for rate limiting; raw IP addresses are not stored
+- `ADMIN_KEY`: long random secret for `/api/admin`
+- `CORS_ORIGIN`: exact frontend origin, or a comma-separated allow-list
+
+The application uses a new `lacuna` database. It does not read, migrate, or delete the previous `nonutnovember` database or its collections. If you later decide to remove the old `quotes` or `presence` collections, do so manually after confirming they are no longer needed.
+
+## Render API deployment
+
+The existing Render service is retained in `render.yaml` to avoid changing its service identity or URL. The blueprint now uses `DB_NAME=lacuna` and no longer requires `REQUIRE_APPROVAL`. Changing the service name to `lacuna-api` in a Render Blueprint can create a new service instead of renaming the existing one; do not rename it until you choose whether to migrate to a new service.
+
+Set `MONGODB_URI`, `DB_NAME=lacuna`, `IP_SALT`, `ADMIN_KEY`, and `CORS_ORIGIN` in the existing Render service, then deploy the backend from the `backend` root directory. The Render build command validates all static lessons before deployment. Keep the health check path at `/healthz`. `GET /healthz` does not require a database connection.
+
+The static frontend is configured in `public/config.js` to keep using the current API URL. Set the Render `CORS_ORIGIN` to the exact Vercel origin before enabling sync from the deployed site.
+
+## Vercel static deployment and site URL
+
+Deploy the repository as a static site with `public/` as the output/root directory. There is no build step. Replace the `SITE_URL` placeholder with the canonical HTTPS origin in:
+
+- `public/index.html` (canonical, Open Graph, Twitter, and JSON-LD URLs)
+- `public/robots.txt`
+- `public/sitemap.xml`
+
+Set the same exact origin in Render's `CORS_ORIGIN`. The repository does not include third-party analytics or tracking scripts. Vercel Insights is not enabled.
+
+## Admin learning stats
+
+Open `/admin.html` and enter `ADMIN_KEY`. The page requests `/api/admin?view=stats` and shows anonymous totals: unique learners, completion rates, hardest steps, wrong-option counts, typing failures, and answer reveals. The admin key is sent only in the request header and is not saved by the page.
+
+## Privacy and data
+
+Learner progress is saved locally first. A random URL-safe learner ID is stored locally and used to sync lesson progress and batched step events. The backend stores only that ID and aggregate step statistics; it does not collect accounts, emails, passwords, or raw IP addresses. Rate limits use salted IP hashes with a TTL. If local storage is unavailable or the API is unreachable, the lesson remains playable in the current tab.
