@@ -1,0 +1,99 @@
+{
+  "id": "py-02-variables",
+  "language": "python",
+  "title": "Variables",
+  "summary": "Give a value a name, then use it.",
+  "finalOutput": "Mira\nMira\nOslo\nMira\n12\n12",
+  "steps": [
+    {
+      "id": "name-variable",
+      "note": "A variable is a name that holds a value. Start with a simple lowercase name.",
+      "code": ["___ = \"Mira\""],
+      "choices": [
+        { "text": "name", "why": "Correct. This name can refer to the text Mira." },
+        { "text": "my-name", "why": "A hyphen means subtraction in Python. Use an underscore or no separator." },
+        { "text": "2name", "why": "A Python variable name cannot start with a number. Try a letter first." }
+      ],
+      "answer": 0,
+      "explain": "The name on the left gives the value on the right a label.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": ""
+    },
+    {
+      "id": "use-variable",
+      "note": "Use a variable's name without quotes to get the value stored inside it.",
+      "code": ["name = \"Mira\"", "print(___)"],
+      "choices": [
+        { "text": "name", "why": "Correct. Python looks up the value stored in name." },
+        { "text": "\"name\"", "why": "Quotes print the word name itself, not the value inside the variable." },
+        { "text": "Name", "why": "Capital letters matter. The variable was created as lowercase name." }
+      ],
+      "answer": 0,
+      "explain": "Without quotes, name refers to the value Mira.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Mira"
+    },
+    {
+      "id": "second-variable",
+      "note": "You can make another variable with a different name.",
+      "code": ["name = \"Mira\"", "print(name)", "___ = \"Oslo\""],
+      "choices": [
+        { "text": "city", "why": "Correct. This gives the place value its own clear name." },
+        { "text": "\"city\"", "why": "Quotes would make this text, not the name of a variable." },
+        { "text": "name", "why": "That would replace the value already stored in name." }
+      ],
+      "answer": 0,
+      "explain": "A new variable name lets you keep a second value too.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Mira"
+    },
+    {
+      "id": "print-city",
+      "note": "The variable name works anywhere a value is needed, including inside print().",
+      "code": ["name = \"Mira\"", "print(name)", "city = \"Oslo\"", "print(___)"],
+      "choices": [
+        { "text": "city", "why": "Correct. Python prints the value stored in city." },
+        { "text": "\"city\"", "why": "With quotes, Python prints the label city rather than its value." },
+        { "text": "City", "why": "The stored variable is lowercase city." }
+      ],
+      "answer": 0,
+      "explain": "Using the variable name retrieves its current value.",
+      "typeMode": "recall",
+      "typeScope": "blank",
+      "output": "Mira\nOslo"
+    },
+    {
+      "id": "number-variable",
+      "note": "A variable can hold a number too. Do not put quotes around a number you want to keep numeric.",
+      "code": ["name = \"Mira\"", "print(name)", "city = \"Oslo\"", "print(city)", "age = ___"],
+      "choices": [
+        { "text": "12", "why": "Correct. This stores a number in age." },
+        { "text": "\"12\"", "why": "Quotes make 12 text instead of a number." },
+        { "text": "twelve", "why": "Python would look for another variable named twelve." }
+      ],
+      "answer": 0,
+      "explain": "The number 12 is stored as a number because it has no quotes.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Mira\nOslo"
+    },
+    {
+      "id": "print-age",
+      "note": "Just like text values, numeric values can be printed by using their variable name.",
+      "code": ["name = \"Mira\"", "print(name)", "city = \"Oslo\"", "print(city)", "age = 12", "print(___)"],
+      "choices": [
+        { "text": "age", "why": "Correct. Python finds the number stored in age." },
+        { "text": "\"age\"", "why": "Quotes would display the word age instead of the number." },
+        { "text": "Age", "why": "Python is case-sensitive, and the variable is lowercase age." }
+      ],
+      "answer": 0,
+      "explain": "The variable name points to 12, so print() displays 12.",
+      "typeMode": "recall",
+      "typeScope": "blank",
+      "output": "Mira\nOslo\n12"
+    }
+  ]
+}

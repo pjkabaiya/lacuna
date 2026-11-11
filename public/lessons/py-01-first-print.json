@@ -1,0 +1,99 @@
+{
+  "id": "py-01-first-print",
+  "language": "python",
+  "title": "Your first print",
+  "summary": "Make the computer say something.",
+  "finalOutput": "Hello\nPython\nReady!\n7\nOne line\nAnother line",
+  "steps": [
+    {
+      "id": "hello-text",
+      "note": "print() shows something on the screen. Put text inside quotes.",
+      "code": ["print(___)"],
+      "choices": [
+        { "text": "\"Hello\"", "why": "Correct. Quotes tell Python that Hello is text." },
+        { "text": "Hello", "why": "Without quotes, Python looks for a variable named Hello." },
+        { "text": "(Hello)", "why": "Parentheses do not add quotes. Python would still look for a variable named Hello." }
+      ],
+      "answer": 0,
+      "explain": "The quotes mark Hello as text, and print() displays it.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Hello"
+    },
+    {
+      "id": "another-message",
+      "note": "A different message goes in its own pair of quotes.",
+      "code": ["print(\"Hello\")", "print(___)"],
+      "choices": [
+        { "text": "\"Python\"", "why": "Correct. This makes Python a text value." },
+        { "text": "\"Python", "why": "This opening quote needs a matching closing quote." },
+        { "text": "python", "why": "Without quotes, Python treats python as a variable name." }
+      ],
+      "answer": 0,
+      "explain": "The new print call displays a second piece of text.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Hello\nPython"
+    },
+    {
+      "id": "call-print",
+      "note": "Python commands are case-sensitive. The built-in function is lowercase print.",
+      "code": ["print(\"Hello\")", "print(\"Python\")", "___"],
+      "choices": [
+        { "text": "print(\"Ready!\")", "why": "Correct. The function name is lowercase, with parentheses around its input." },
+        { "text": "Print(\"Ready!\")", "why": "Python treats Print and print as different names. Use lowercase." },
+        { "text": "print \"Ready!\"", "why": "In Python, the value for print goes inside parentheses." }
+      ],
+      "answer": 0,
+      "explain": "Use lowercase print() with the text inside its parentheses.",
+      "typeMode": "copy",
+      "typeScope": "line",
+      "output": "Hello\nPython\nReady!"
+    },
+    {
+      "id": "print-number",
+      "note": "Numbers can be printed without quotes. Python keeps them as numbers.",
+      "code": ["print(\"Hello\")", "print(\"Python\")", "print(\"Ready!\")", "print(___)"],
+      "choices": [
+        { "text": "7", "why": "Correct. This is the number seven." },
+        { "text": "\"7\"", "why": "Quotes make this text, not a number." },
+        { "text": "seven", "why": "Python would look for a variable named seven." }
+      ],
+      "answer": 0,
+      "explain": "Without quotes, 7 is a number that print() can display.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Hello\nPython\nReady!\n7"
+    },
+    {
+      "id": "finish-parentheses",
+      "note": "The opening and closing parentheses keep each print call together.",
+      "code": ["print(\"Hello\")", "print(\"Python\")", "print(\"Ready!\")", "print(7)", "___"],
+      "choices": [
+        { "text": "print(\"One line\")", "why": "Correct. This is a complete print call." },
+        { "text": "print(\"One line\"", "why": "The opening parenthesis needs a closing parenthesis." },
+        { "text": "print(\"One line\"]", "why": "The brackets do not match. Close the parenthesis with )." }
+      ],
+      "answer": 0,
+      "explain": "Matching parentheses show Python where the function call ends.",
+      "typeMode": "copy",
+      "typeScope": "line",
+      "output": "Hello\nPython\nReady!\n7\nOne line"
+    },
+    {
+      "id": "new-line",
+      "note": "Each print() call writes its value on a new line.",
+      "code": ["print(\"Hello\")", "print(\"Python\")", "print(\"Ready!\")", "print(7)", "print(\"One line\")", "print(___)"],
+      "choices": [
+        { "text": "\"Another line\"", "why": "Correct. This is the next text value to print." },
+        { "text": "Another line", "why": "Text needs quotes so Python does not search for a variable." },
+        { "text": "\"Another line)", "why": "The text needs a closing quote before the parenthesis." }
+      ],
+      "answer": 0,
+      "explain": "Every print call starts a fresh output line.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "Hello\nPython\nReady!\n7\nOne line\nAnother line"
+    }
+  ]
+}

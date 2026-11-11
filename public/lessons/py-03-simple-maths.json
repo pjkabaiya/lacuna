@@ -1,0 +1,99 @@
+{
+  "id": "py-03-simple-maths",
+  "language": "python",
+  "title": "Simple maths and strings",
+  "summary": "Use math operators and join text.",
+  "finalOutput": "5\n5\n12\nHello world\n55\n10",
+  "steps": [
+    {
+      "id": "addition",
+      "note": "The plus sign adds numbers together. Python calculates the result.",
+      "code": ["print(___)"],
+      "choices": [
+        { "text": "2 + 3", "why": "Correct. Python adds the two numbers and prints 5." },
+        { "text": "\"2 + 3\"", "why": "Quotes make one piece of text, so Python will not do the addition." },
+        { "text": "2 - 3", "why": "The minus sign subtracts. Use plus to add these numbers." }
+      ],
+      "answer": 0,
+      "explain": "The + operator adds 2 and 3, giving the number 5.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "5"
+    },
+    {
+      "id": "subtraction",
+      "note": "The minus sign subtracts the number on the right from the number on the left.",
+      "code": ["print(2 + 3)", "print(___)"],
+      "choices": [
+        { "text": "8 - 3", "why": "Correct. Eight minus three is five." },
+        { "text": "8 + 3", "why": "That adds the numbers. This step is about subtraction." },
+        { "text": "\"8 - 3\"", "why": "Quotes turn the expression into text instead of a calculation." }
+      ],
+      "answer": 0,
+      "explain": "The - operator subtracts 3 from 8.",
+      "typeMode": "recall",
+      "typeScope": "blank",
+      "output": "5\n5"
+    },
+    {
+      "id": "multiplication",
+      "note": "In Python, an asterisk means multiply.",
+      "code": ["print(2 + 3)", "print(8 - 3)", "print(___)"],
+      "choices": [
+        { "text": "4 * 3", "why": "Correct. The asterisk multiplies four by three." },
+        { "text": "4 x 3", "why": "Python uses * for multiplication, not the letter x." },
+        { "text": "4 + 3", "why": "The plus sign adds; it does not multiply." }
+      ],
+      "answer": 0,
+      "explain": "The * operator multiplies the two numbers to get 12.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "5\n5\n12"
+    },
+    {
+      "id": "join-strings",
+      "note": "The plus sign can join text too. Add a space string between words when you need a space.",
+      "code": ["print(2 + 3)", "print(8 - 3)", "print(4 * 3)", "print(___)"],
+      "choices": [
+        { "text": "\"Hello\" + \" \" + \"world\"", "why": "Correct. The three text pieces join into Hello world." },
+        { "text": "\"Hello\" + \"world\"", "why": "This joins the words with no space between them." },
+        { "text": "\"Hello\" - \"world\"", "why": "Python cannot subtract text. Use + to join strings." }
+      ],
+      "answer": 0,
+      "explain": "Each quoted piece is text, and + joins the pieces together.",
+      "typeMode": "copy",
+      "typeScope": "blank",
+      "output": "5\n5\n12\nHello world"
+    },
+    {
+      "id": "text-plus-text",
+      "note": "Quoted digits are text. Adding two text values joins them instead of doing arithmetic.",
+      "code": ["print(2 + 3)", "print(8 - 3)", "print(4 * 3)", "print(\"Hello\" + \" \" + \"world\")", "print(___)"],
+      "choices": [
+        { "text": "\"5\" + \"5\"", "why": "Correct. Both values are text, so the result is 55." },
+        { "text": "5 + 5", "why": "These are numbers, so Python adds them to get 10." },
+        { "text": "\"5\" * \"5\"", "why": "Python cannot multiply one text value by another text value." }
+      ],
+      "answer": 0,
+      "explain": "Because both 5s are quoted, + joins the text to make 55.",
+      "typeMode": "recall",
+      "typeScope": "blank",
+      "output": "5\n5\n12\nHello world\n55"
+    },
+    {
+      "id": "number-plus-number",
+      "note": "Without quotes, 5 and 5 are numbers. Adding them gives ten, not the text 55.",
+      "code": ["print(2 + 3)", "print(8 - 3)", "print(4 * 3)", "print(\"Hello\" + \" \" + \"world\")", "print(\"5\" + \"5\")", "print(___)"],
+      "choices": [
+        { "text": "5 + 5", "why": "Correct. These are numbers, so Python calculates their sum." },
+        { "text": "\"5\" + \"5\"", "why": "Quotes make these text, which joins into 55." },
+        { "text": "5 * 5", "why": "The asterisk multiplies; this step asks you to add." }
+      ],
+      "answer": 0,
+      "explain": "Unquoted digits are numbers, so 5 + 5 evaluates to 10.",
+      "typeMode": "recall",
+      "typeScope": "blank",
+      "output": "5\n5\n12\nHello world\n55\n10"
+    }
+  ]
+}

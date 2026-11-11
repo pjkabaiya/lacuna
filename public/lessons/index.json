@@ -1,0 +1,25 @@
+{
+  "lessons": [
+    {
+      "id": "py-01-first-print",
+      "title": "Your first print",
+      "summary": "Make the computer say something.",
+      "order": 1,
+      "language": "python"
+    },
+    {
+      "id": "py-02-variables",
+      "title": "Variables",
+      "summary": "Give a value a name, then use it.",
+      "order": 2,
+      "language": "python"
+    },
+    {
+      "id": "py-03-simple-maths",
+      "title": "Simple maths and strings",
+      "summary": "Add, subtract, multiply, and join text.",
+      "order": 3,
+      "language": "python"
+    }
+  ]
+}
