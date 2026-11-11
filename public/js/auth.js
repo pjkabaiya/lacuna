@@ -6,6 +6,8 @@
     && ['authDomain', 'projectId', 'appId'].every((key) => typeof config[key] === 'string'
       && config[key].length > 0 && !config[key].startsWith('your-'));
   const toggle = document.getElementById('account-toggle');
+  const accountLabel = toggle && toggle.querySelector('.account-label');
+  const accountAvatar = toggle && toggle.querySelector('.account-avatar');
   const panel = document.getElementById('account-panel');
   const accountStatus = document.getElementById('account-status');
   const signOutButton = document.getElementById('sign-out');
@@ -55,17 +57,24 @@
   function updateAccount(user) {
     if (toggle) {
       if (user) {
-        toggle.textContent = 'Account';
+        const label = user.displayName || user.email || 'Signed in';
+        if (accountLabel) accountLabel.textContent = label;
+        if (accountAvatar) accountAvatar.textContent = label.trim().charAt(0).toUpperCase();
+        toggle.title = user.email || label;
+        toggle.setAttribute('aria-label', `Signed in as ${user.displayName || user.email || 'user'}. Open account options.`);
         toggle.href = '#account-panel';
       } else {
-        toggle.textContent = 'Sign in';
+        if (accountLabel) accountLabel.textContent = 'Sign in';
+        if (accountAvatar) accountAvatar.textContent = '';
+        toggle.removeAttribute('title');
+        toggle.setAttribute('aria-label', 'Sign in');
         const next = `${location.pathname}${location.search}${location.hash}`;
         toggle.href = `auth.html?next=${encodeURIComponent(next)}`;
       }
     }
     if (accountStatus) {
       accountStatus.textContent = user
-        ? `Signed in as ${user.email || 'your account'}. Your progress syncs across devices.`
+        ? `Signed in as ${user.displayName || user.email || 'your account'}. Your progress syncs across devices.`
         : 'Sign in to sync your progress across devices.';
     }
     if (signOutButton) signOutButton.hidden = !user;

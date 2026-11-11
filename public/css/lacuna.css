@@ -78,26 +78,69 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   cursor: pointer;
 }
 .header-link:hover, .text-button:hover { text-decoration: underline; text-underline-offset: 4px; }
-.account-area { position: relative; }
+.account-area { position: relative; flex: 0 1 auto; }
+.account-trigger {
+  display: inline-flex;
+  min-height: 42px;
+  max-width: min(320px, 32vw);
+  align-items: center;
+  gap: 9px;
+  border: 1.5px solid #d6aa9d;
+  border-radius: 999px;
+  padding: 5px 12px 5px 6px;
+  color: var(--oxblood);
+  background: var(--cream);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+}
+.account-trigger:hover {
+  transform: translateY(-1px);
+  border-color: var(--oxblood);
+  box-shadow: 2px 3px 0 var(--oxblood);
+}
+.account-avatar {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--cream);
+  background: var(--tomato);
+  font-size: 12px;
+  font-weight: 900;
+}
+.account-label { overflow: hidden; max-width: 230px; text-overflow: ellipsis; white-space: nowrap; }
+.account-chevron {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  transform: rotate(45deg) translateY(-2px);
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+}
 .account-panel {
   position: absolute;
   z-index: 10;
   top: calc(100% + 10px);
   right: 0;
-  width: min(320px, calc(100vw - 32px));
+  width: min(340px, calc(100vw - 32px));
   border: 2px solid var(--oxblood);
   border-radius: 14px;
   padding: 16px;
   background: var(--cream);
-  box-shadow: 4px 5px 0 var(--oxblood);
+  box-shadow: 3px 4px 0 var(--oxblood);
 }
-.account-status { margin: 0 0 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+.account-status { margin: 0 0 8px; color: var(--oxblood); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .account-panel > .text-button { display: block; margin: 8px auto 0; }
 
 .auth-page { min-height: 100vh; }
 .auth-shell { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(460px, 1fr); }
 .auth-art { min-height: 100vh; overflow: hidden; background: var(--oxblood); }
-.auth-art img { display: block; width: 100%; height: 100vh; object-fit: cover; }
+.auth-art img { display: block; width: 100%; height: 100vh; object-fit: cover; object-position: center top; }
 .auth-side { display: flex; flex-direction: column; align-items: center; padding: 26px 38px 28px; }
 .auth-wordmark { align-self: flex-start; margin-left: max(0px, calc((100% - 400px) / 2)); font-size: 32px; }
 .auth-wordmark span { width: 47px; height: 9px; }
@@ -475,7 +518,7 @@ td code { font-size: 12px; overflow-wrap: anywhere; }
 @media (max-width: 760px) {
   .auth-shell { grid-template-columns: 1fr; grid-template-rows: minmax(170px, 28vh) 1fr; }
   .auth-art { min-height: 0; }
-  .auth-art img { height: 100%; min-height: 170px; max-height: 250px; object-position: center 42%; }
+  .auth-art img { height: 100%; min-height: 170px; max-height: 250px; object-position: center top; }
   .auth-side { padding: 18px 24px max(24px, env(safe-area-inset-bottom)); }
   .auth-wordmark { margin-left: 0; font-size: 27px; }
   .auth-wordmark span { width: 37px; height: 7px; }
@@ -494,6 +537,9 @@ td code { font-size: 12px; overflow-wrap: anywhere; }
   .player-page { padding-bottom: 104px; }
   .player-header { flex-wrap: wrap; gap: 10px; padding: 12px 0; }
   .player-header .wordmark { font-size: 25px; }
+  .account-trigger { max-width: min(220px, 48vw); min-height: 38px; gap: 7px; padding-right: 10px; font-size: 12px; }
+  .account-label { max-width: min(150px, 34vw); }
+  .account-avatar { width: 26px; height: 26px; flex-basis: 26px; }
   .step-progress { order: 2; justify-content: flex-end; flex: 1 1 120px; }
   .progress-mark { width: 22px; }
   .course-pill { order: 3; max-width: 100%; }
@@ -520,6 +566,8 @@ td code { font-size: 12px; overflow-wrap: anywhere; }
 @media (max-width: 390px) {
   .auth-side { padding-right: 20px; padding-left: 20px; }
   .site-header, .home-page main, .site-footer, .player-header, .player-layout { width: calc(100% - 28px); }
+  .account-trigger { max-width: 48vw; }
+  .account-label { max-width: 29vw; }
   .course-pill { font-size: 11px; }
   .step-progress { gap: 5px; }
   .progress-mark { width: 18px; }
