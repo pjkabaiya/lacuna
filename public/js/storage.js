@@ -1,8 +1,7 @@
 (function () {
   const PROGRESS_KEY = 'lacuna:progress';
-  const LEARNER_KEY = 'lacuna:learnerId';
   const EVENTS_KEY = 'lacuna:events';
-  const memory = { progress: {}, events: [], learnerId: '' };
+  const memory = { progress: {}, events: [] };
 
   function readJson(key, fallback) {
     try {
@@ -24,22 +23,7 @@
     }
   }
 
-  function learnerId() {
-    try {
-      let id = localStorage.getItem(LEARNER_KEY);
-      if (!id) {
-        id = `l_${crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '') : `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`}`;
-        localStorage.setItem(LEARNER_KEY, id);
-      }
-      return id;
-    } catch (error) {
-      if (!memory.learnerId) memory.learnerId = `l_${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
-      return memory.learnerId;
-    }
-  }
-
   window.LacunaStorage = {
-    learnerId,
     progress: () => {
       const progress = readJson(PROGRESS_KEY, memory.progress);
       return progress && typeof progress === 'object' && !Array.isArray(progress) ? progress : memory.progress;

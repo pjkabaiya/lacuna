@@ -1,15 +1,24 @@
 (function () {
   const apiBase = (window.API_BASE || '/api').replace(/\/+$/, '');
   const timeoutMs = 4500;
+  let eventFlushPromise = Promise.resolve();
 
   async function request(path, options) {
+    await window.LacunaAuthReady;
+    const user = window.LacunaAuth && window.LacunaAuth.currentUser();
+    if (!user) throw new Error('Sign in to sync progress.');
+    const token = await user.getIdToken();
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetch(`${apiBase}${path}`, {
         ...options,
         signal: controller.signal,
-        headers: { 'Content-Type': 'application/json', ...(options && options.headers) },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          ...(options && options.headers),
+        },
       });
       let data = {};
       try {
@@ -24,11 +33,12 @@
     }
   }
 
-  async function syncProgress(learnerId, lessonId, progress) {
+  async function syncProgress(lessonId, progress) {
+    await window.LacunaAuthReady;
+    if (!window.LacunaAuth.currentUser()) return null;
     return request('/progress', {
       method: 'POST',
       body: JSON.stringify({
-        learnerId,
         lessonId,
         stepIndex: progress.stepIndex,
         completed: progress.completed,
@@ -37,22 +47,58 @@
     });
   }
 
-  async function loadProgress(learnerId) {
-    const query = new URLSearchParams({ learnerId });
-    return request(`/progress?${query}`);
+  async function loadProgress() {
+    await window.LacunaAuthReady;
+    if (!window.LacunaAuth.currentUser()) return null;
+    return request('/progress');
   }
 
-  async function flushEvents(storage, learnerId) {
-    const pending = storage.events();
-    if (!pending.length) return;
-    const batch = pending.slice(0, 50);
-    await request('/events', {
-      method: 'POST',
-      body: JSON.stringify({ learnerId, events: batch }),
+  function flushEvents(storage) {
+    const result = eventFlushPromise.then(async () => {
+      await window.LacunaAuthReady;
+      if (!window.LacunaAuth.currentUser()) return;
+      let pending = storage.events();
+      while (pending.length) {
+        const batch = pending.slice(0, 50);
+        await request('/events', {
+          method: 'POST',
+          body: JSON.stringify({ events: batch }),
+        });
+        pending = pending.slice(batch.length);
+        storage.saveEvents(pending);
+      }
     });
-    storage.saveEvents(pending.slice(batch.length));
-    if (pending.length > batch.length) return flushEvents(storage, learnerId);
+    eventFlushPromise = result.catch(() => {});
+    return result;
   }
 
-  window.LacunaApi = { flushEvents, loadProgress, syncProgress };
+  function mergeProgress(local, remote) {
+    return {
+      ...local,
+      ...remote,
+      stepIndex: Math.max(local.stepIndex || 0, remote.stepIndex || 0),
+      completed: Boolean(local.completed || remote.completed),
+      completedAt: local.completedAt || remote.completedAt || null,
+      mistakes: Math.max(local.mistakes || 0, remote.mistakes || 0),
+    };
+  }
+
+  async function syncAccountData() {
+    const remote = await loadProgress();
+    const local = window.LacunaStorage.progress();
+    const lessons = { ...(remote.lessons || {}) };
+    Object.keys(local).forEach((lessonId) => {
+      lessons[lessonId] = lessons[lessonId]
+        ? mergeProgress(local[lessonId], lessons[lessonId])
+        : local[lessonId];
+    });
+    window.LacunaStorage.saveProgress(lessons);
+    await Promise.all(Object.entries(lessons)
+      .map(([lessonId, progress]) => syncProgress(lessonId, progress)));
+    await flushEvents(window.LacunaStorage);
+    window.dispatchEvent(new CustomEvent('lacuna-progress-updated', { detail: { lessons } }));
+    return lessons;
+  }
+
+  window.LacunaApi = { flushEvents, loadProgress, syncAccountData, syncProgress };
 })();

@@ -1,5 +1,6 @@
 const { getDb } = require('../lib/db');
-const { isId, isLessonId, isStepId, rateLimit } = require('./common');
+const { isLessonId, isStepId, rateLimit } = require('./common');
+const { requireAuth } = require('../lib/auth');
 
 function validEvent(event) {
   if (!event || !isLessonId(event.lessonId) || !isStepId(event.stepId)) return false;
@@ -12,7 +13,9 @@ function validEvent(event) {
   return true;
 }
 
-module.exports = async (req, res) => {
+module.exports = (req, res) => requireAuth(req, res, () => handleEvents(req, res));
+
+async function handleEvents(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -22,7 +25,9 @@ module.exports = async (req, res) => {
   try {
     if (!await rateLimit(req)) return res.status(429).json({ error: 'rate_limited' });
     const body = req.body || {};
-    if (!isId(body.learnerId)) return res.status(400).json({ error: 'invalid_learner_id' });
+    if (Object.keys(body).some((key) => key !== 'events')) {
+      return res.status(400).json({ error: 'unexpected_field' });
+    }
     if (!Array.isArray(body.events) || body.events.length > 50 || !body.events.every(validEvent)) {
       return res.status(400).json({ error: 'invalid_events' });
     }
@@ -32,7 +37,7 @@ module.exports = async (req, res) => {
     const learnerCollection = db.collection('learners');
     const now = new Date();
     await learnerCollection.updateOne(
-      { _id: body.learnerId },
+      { _id: req.auth.uid },
       { $setOnInsert: { createdAt: now }, $set: { lastSeen: now } },
       { upsert: true },
     );
@@ -70,4 +75,4 @@ module.exports = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: 'server_error' });
   }
-};
+}

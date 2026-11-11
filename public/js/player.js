@@ -1,7 +1,6 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const storage = window.LacunaStorage;
-  const learnerId = storage.learnerId();
   const params = new URLSearchParams(location.search);
   const lessonId = params.get('id') || '';
   const player = $('player');
@@ -34,7 +33,8 @@
   }
 
   function updateSyncStatus() {
-    if (!storageAvailable) setSaveStatus('Using this tab for now', true);
+    if (!window.LacunaAuth || !window.LacunaAuth.currentUser()) setSaveStatus('Saved on this device', false);
+    else if (!storageAvailable) setSaveStatus('Using this tab for now', true);
     else if (progressSynced && eventsSynced) setSaveStatus('Progress synced', false);
     else setSaveStatus('Saved on this device · syncing later', true);
   }
@@ -55,7 +55,7 @@
     if (!queued) storageAvailable = false;
     eventsSynced = false;
     updateSyncStatus();
-    eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage, learnerId))
+    eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage))
       .then(() => {
         eventsSynced = true;
         updateSyncStatus();
@@ -83,11 +83,11 @@
   }
 
   function syncPending() {
-    if (!lesson || !navigator.onLine) return;
+    if (!lesson || !navigator.onLine || !window.LacunaAuth.currentUser()) return;
     const saved = progressByLesson[lesson.id];
     if (!progressSynced && !progressSyncInFlight && saved) {
       progressSyncInFlight = true;
-      window.LacunaApi.syncProgress(learnerId, lesson.id, saved)
+      window.LacunaApi.syncProgress(lesson.id, saved)
         .then(() => { progressSynced = !progressSyncRequested; })
         .catch(() => {
           progressSynced = false;
@@ -104,7 +104,7 @@
       progressSyncRequested = true;
     }
     if (!eventsSynced && storage.events().length) {
-      eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage, learnerId))
+      eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage))
         .then(() => { eventsSynced = true; })
         .catch(() => { eventsSynced = false; })
         .then(updateSyncStatus);
@@ -516,11 +516,12 @@
       render();
       recordStepShown();
 
-      window.LacunaApi.loadProgress(learnerId)
+      window.LacunaApi.loadProgress()
         .then((remote) => {
+          if (!remote) return null;
           const merged = mergeRemoteProgress(remote);
           if (merged && Number.isInteger(merged.stepIndex)) {
-            return window.LacunaApi.syncProgress(learnerId, lesson.id, merged);
+            return window.LacunaApi.syncProgress(lesson.id, merged);
           }
           return null;
         })
@@ -532,7 +533,7 @@
           progressSynced = false;
           updateSyncStatus();
         });
-      eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage, learnerId))
+      eventFlush = eventFlush.then(() => window.LacunaApi.flushEvents(storage))
         .then(() => {
           eventsSynced = true;
           updateSyncStatus();
@@ -580,6 +581,17 @@
   });
 
   window.addEventListener('online', syncPending);
+  window.addEventListener('lacuna-auth-change', (event) => {
+    if (event.detail.user) syncPending();
+    else updateSyncStatus();
+  });
+  window.addEventListener('lacuna-progress-updated', (event) => {
+    if (!lesson) return;
+    mergeRemoteProgress({ lessons: event.detail.lessons });
+    progressSynced = true;
+    eventsSynced = storage.events().length === 0;
+    updateSyncStatus();
+  });
   window.setInterval(syncPending, 30000);
   loadLesson();
 })();

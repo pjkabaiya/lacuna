@@ -107,6 +107,24 @@ require.cache[dbPath] = {
   loaded: true,
   exports: { getDb: async () => fakeDb },
 };
+const authPath = require.resolve('../lib/auth');
+require.cache[authPath] = {
+  id: authPath,
+  filename: authPath,
+  loaded: true,
+  exports: {
+    requireAuth(req, res, next) {
+      const users = {
+        'test-user-token': 'firebase-user-123456789',
+        'other-user-token': 'firebase-user-987654321',
+      };
+      const token = (req.headers.authorization || '').replace(/^Bearer /i, '');
+      if (!users[token]) return res.status(401).json({ error: 'unauthorized' });
+      req.auth = { uid: users[token] };
+      return next();
+    },
+  },
+};
 const app = require('../server');
 
 let server;
@@ -123,7 +141,11 @@ test.after(async () => {
 async function json(path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     ...options,
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer test-user-token',
+      ...(options.headers || {}),
+    },
   });
   return { response, data: await response.json() };
 }
@@ -132,6 +154,7 @@ test('health and CORS respond without connecting to MongoDB', async () => {
   const response = await fetch(`${baseUrl}/healthz`, { headers: { Origin: 'https://app.example' } });
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('access-control-allow-origin'), 'https://app.example');
+  assert.match(response.headers.get('access-control-allow-headers'), /authorization/i);
   assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
   const missing = await json('/api/not-a-route');
   assert.equal(missing.response.status, 404);
@@ -156,43 +179,51 @@ test('malformed and oversized JSON bodies return consistent errors', async () =>
   assert.deepEqual(await oversized.json(), { error: 'request_too_large' });
 });
 
-test('progress is validated and only moves forward', async () => {
-  const learnerId = 'l_123456789012345678901234';
+test('progress requires authentication and only exposes the signed-in account', async () => {
+  const unauthenticated = await json('/api/progress', { headers: { Authorization: '' } });
+  assert.equal(unauthenticated.response.status, 401);
+  assert.equal(unauthenticated.data.error, 'unauthorized');
+
   const first = await json('/api/progress', {
     method: 'POST',
-    body: JSON.stringify({ learnerId, lessonId: 'py-01-first-print', stepIndex: 2, completed: false, mistakes: 3 }),
+    body: JSON.stringify({ lessonId: 'py-01-first-print', stepIndex: 2, completed: false, mistakes: 3 }),
   });
   assert.equal(first.response.status, 200);
 
   const backwards = await json('/api/progress', {
     method: 'POST',
-    body: JSON.stringify({ learnerId, lessonId: 'py-01-first-print', stepIndex: 0, completed: false, mistakes: 1 }),
+    body: JSON.stringify({ lessonId: 'py-01-first-print', stepIndex: 0, completed: false, mistakes: 1 }),
   });
   assert.equal(backwards.response.status, 200);
 
   const completed = await json('/api/progress', {
     method: 'POST',
-    body: JSON.stringify({ learnerId, lessonId: 'py-01-first-print', stepIndex: 6, completed: true, mistakes: 4 }),
+    body: JSON.stringify({ lessonId: 'py-01-first-print', stepIndex: 6, completed: true, mistakes: 4 }),
   });
   assert.equal(completed.response.status, 200);
 
-  const response = await json(`/api/progress?learnerId=${learnerId}`);
+  const response = await json('/api/progress');
   assert.equal(response.response.status, 200);
   assert.equal(response.data.lessons['py-01-first-print'].stepIndex, 6);
   assert.equal(response.data.lessons['py-01-first-print'].completed, true);
   assert.equal(response.data.lessons['py-01-first-print'].mistakes, 4);
 
-  const invalid = await json('/api/progress?learnerId=bad');
-  assert.equal(invalid.response.status, 400);
-  assert.equal(invalid.data.error, 'invalid_learner_id');
+  const spoofed = await json('/api/progress', {
+    method: 'POST',
+    body: JSON.stringify({ learnerId: 'another-user', lessonId: 'py-01-first-print', stepIndex: 1, completed: false }),
+  });
+  assert.equal(spoofed.response.status, 400);
+  assert.equal(spoofed.data.error, 'unexpected_field');
+
+  const otherAccount = await json('/api/progress', { headers: { Authorization: 'Bearer other-user-token' } });
+  assert.deepEqual(otherAccount.data.lessons, {});
 });
 
 test('events aggregate choices, typing failures, and answer reveals', async () => {
-  const learnerId = 'l_987654321098765432109876';
   const result = await json('/api/events', {
     method: 'POST',
+    headers: { Authorization: 'Bearer other-user-token' },
     body: JSON.stringify({
-      learnerId,
       events: [
         { lessonId: 'py-01-first-print', stepId: 'hello-text', type: 'shown', attempts: 0, ms: 0 },
         { lessonId: 'py-01-first-print', stepId: 'hello-text', type: 'choice', correct: false, option: 1, attempts: 1, ms: 500 },
@@ -213,7 +244,7 @@ test('events aggregate choices, typing failures, and answer reveals', async () =
 
   const tooMany = await json('/api/events', {
     method: 'POST',
-    body: JSON.stringify({ learnerId, events: Array.from({ length: 51 }, () => ({})) }),
+    body: JSON.stringify({ events: Array.from({ length: 51 }, () => ({})) }),
   });
   assert.equal(tooMany.response.status, 400);
   assert.equal(tooMany.data.error, 'invalid_events');

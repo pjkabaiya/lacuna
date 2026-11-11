@@ -1,13 +1,8 @@
 const crypto = require('crypto');
 const { getDb } = require('../lib/db');
 
-const ID_PATTERN = /^[A-Za-z0-9_-]{20,80}$/;
 const LESSON_PATTERN = /^[a-z0-9-]{1,80}$/;
 const STEP_PATTERN = /^[a-z0-9-]{1,40}$/;
-
-function isId(value) {
-  return typeof value === 'string' && ID_PATTERN.test(value);
-}
 
 function isLessonId(value) {
   return typeof value === 'string' && LESSON_PATTERN.test(value);
@@ -34,7 +29,6 @@ async function rateLimit(req) {
 }
 
 module.exports = {
-  isId,
   isLessonId,
   isStepId,
   rateLimit,

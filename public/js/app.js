@@ -56,4 +56,14 @@
     message.textContent = error.message;
     lessonList.append(message);
   });
+
+  window.addEventListener('lacuna-progress-updated', () => {
+    start().catch((error) => {
+      lessonList.replaceChildren();
+      const message = document.createElement('p');
+      message.className = 'muted';
+      message.textContent = error.message;
+      lessonList.append(message);
+    });
+  });
 })();

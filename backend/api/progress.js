@@ -1,12 +1,14 @@
 const { getDb } = require('../lib/db');
-const { isId, isLessonId, rateLimit } = require('./common');
+const { isLessonId, rateLimit } = require('./common');
+const { requireAuth } = require('../lib/auth');
 
-module.exports = async (req, res) => {
+module.exports = (req, res) => requireAuth(req, res, () => handleProgress(req, res));
+
+async function handleProgress(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   try {
+    const learnerId = req.auth.uid;
     if (req.method === 'GET') {
-      const learnerId = req.query.learnerId;
-      if (!isId(learnerId)) return res.status(400).json({ error: 'invalid_learner_id' });
       const docs = await (await getDb()).collection('progress')
         .find({ learnerId }).toArray();
       const lessons = {};
@@ -24,10 +26,9 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
       if (!await rateLimit(req)) return res.status(429).json({ error: 'rate_limited' });
       const body = req.body || {};
-      if (Object.keys(body).some((key) => !['learnerId', 'lessonId', 'stepIndex', 'completed', 'mistakes'].includes(key))) {
+      if (Object.keys(body).some((key) => !['lessonId', 'stepIndex', 'completed', 'mistakes'].includes(key))) {
         return res.status(400).json({ error: 'unexpected_field' });
       }
-      if (!isId(body.learnerId)) return res.status(400).json({ error: 'invalid_learner_id' });
       if (!isLessonId(body.lessonId)) return res.status(400).json({ error: 'invalid_lesson_id' });
       if (!Number.isInteger(body.stepIndex) || body.stepIndex < 0 || body.stepIndex > 1000) {
         return res.status(400).json({ error: 'invalid_step_index' });
@@ -43,7 +44,7 @@ module.exports = async (req, res) => {
       const update = {
         $max: { stepIndex: body.stepIndex, mistakes },
         $setOnInsert: {
-          learnerId: body.learnerId,
+          learnerId,
           lessonId: body.lessonId,
           createdAt: now,
         },
@@ -55,12 +56,12 @@ module.exports = async (req, res) => {
         update.$setOnInsert.completed = false;
       }
       await db.collection('progress').updateOne(
-        { learnerId: body.learnerId, lessonId: body.lessonId },
+        { learnerId, lessonId: body.lessonId },
         update,
         { upsert: true },
       );
       await db.collection('learners').updateOne(
-        { _id: body.learnerId },
+        { _id: learnerId },
         { $setOnInsert: { createdAt: now }, $set: { lastSeen: now } },
         { upsert: true },
       );
@@ -73,4 +74,4 @@ module.exports = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: 'server_error' });
   }
-};
+}
