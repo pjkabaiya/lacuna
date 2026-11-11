@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbd9c9">
+  <meta name="description" content="Sign in to save your lacuna learning progress across devices.">
+  <meta name="robots" content="noindex, follow">
+  <title>Sign in — lacuna</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="css/lacuna.css">
+  <script src="config.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/api.js"></script>
+  <script defer src="js/auth.js"></script>
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <div class="auth-art" aria-hidden="true">
+      <img src="authart.svg" alt="">
+    </div>
+    <section class="auth-side" aria-labelledby="auth-heading">
+      <a class="wordmark auth-wordmark" href="index.html" aria-label="lacuna home">lacuna<span aria-hidden="true"></span></a>
+      <div class="auth-content">
+        <p class="eyebrow">Your learning, saved</p>
+        <h1 id="auth-heading">Welcome back.</h1>
+        <p id="auth-description" class="auth-description">Sign in to sync your progress across devices.</p>
+
+        <form id="auth-form" class="auth-form">
+          <label for="auth-email">Email</label>
+          <input id="auth-email" name="email" type="email" autocomplete="email" required>
+
+          <label for="auth-password">Password</label>
+          <div class="password-field">
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+            <button id="toggle-password" class="password-toggle" type="button" aria-label="Show password">Show</button>
+          </div>
+
+          <button id="auth-submit" class="button button-primary auth-submit" type="submit">Sign in with email</button>
+        </form>
+
+        <button id="forgot-password" class="text-button forgot-password" type="button">Forgot password?</button>
+        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+        <button id="google-sign-in" class="button auth-google" type="button">
+          <span class="google-g" aria-hidden="true">G</span>
+          Continue with Google
+        </button>
+        <p class="auth-switch">
+          <span id="auth-switch-copy">New to lacuna?</span>
+          <button id="auth-mode-toggle" class="auth-inline-link" type="button">Create an account</button>
+        </p>
+        <p id="auth-message" class="auth-message" role="alert" aria-live="polite"></p>
+        <p id="auth-status" class="auth-status" role="status" aria-live="polite"></p>
+        <a class="auth-back" href="index.html#lessons">Back to lessons</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

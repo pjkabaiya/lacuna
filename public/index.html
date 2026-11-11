@@ -41,20 +41,10 @@
     <a class="wordmark" href="index.html" aria-label="lacuna home">lacuna<span aria-hidden="true"></span></a>
     <a class="header-link" href="#lessons">Pick up learning</a>
     <div class="account-area">
-      <button id="account-toggle" class="header-link" type="button" aria-expanded="false" aria-controls="account-panel">Sign in</button>
+      <a id="account-toggle" class="header-link" href="auth.html">Sign in</a>
       <section id="account-panel" class="account-panel" aria-label="Your account" hidden>
-        <p id="account-status" class="account-status">Loading account sign-in…</p>
-        <form id="account-form" class="account-form">
-          <label for="account-email">Email</label>
-          <input id="account-email" type="email" autocomplete="email" required>
-          <label for="account-password">Password</label>
-          <input id="account-password" type="password" autocomplete="current-password" required>
-          <button class="button button-primary" type="submit">Sign in with email</button>
-          <button id="create-account" class="text-button" type="button">Create an account</button>
-        </form>
-        <button id="google-sign-in" class="button account-secondary" type="button">Continue with Google</button>
-        <button id="sign-out" class="text-button" type="button" hidden>Sign out</button>
-        <p id="account-message" class="account-message" role="status" aria-live="polite"></p>
+        <p id="account-status" class="account-status"></p>
+        <button id="sign-out" class="text-button" type="button">Sign out</button>
       </section>
     </div>
   </header>

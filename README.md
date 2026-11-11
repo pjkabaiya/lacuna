@@ -10,6 +10,7 @@ Lacuna helps absolute beginners learn Python one small piece at a time: read a s
 - `public/lessons/`: lesson JSON files and ordered manifest
 - `public/config.js`: API base URL and public Firebase web settings
 - `public/js/auth.js`: Firebase email/password and Google sign-in
+- `public/auth.html`: illustrated sign-in, account creation, and password reset
 - `public/admin.html`: password-protected learning difficulty dashboard
 - `backend/server.js`: Express API, CORS allow-list, security headers, and health check
 - `backend/api/`: progress, learning events, and admin stats endpoints
@@ -48,7 +49,7 @@ In another terminal, serve `public/` on `http://localhost:8000` with any static 
 
 ## Accounts and cross-device progress
 
-Firebase Authentication provides optional email/password and Google sign-in. In Firebase Console, enable both providers and add the deployed frontend origin to Authentication's authorized domains. Set the Firebase web app's `apiKey`, `authDomain`, `projectId`, and `appId` in `public/config.js`; these web settings are public and are not service-account credentials.
+Firebase Authentication provides optional email/password and Google sign-in through `public/auth.html`. In Firebase Console, enable both providers and add the deployed frontend origin to Authentication's authorized domains. `public/config.js` contains the Firebase web app's `apiKey`, `authDomain`, `projectId`, and `appId`; these web settings are public and are not service-account credentials. If Firebase reports `API_KEY_INVALID`, use the Web API key for this exact Firebase project and check its API restrictions permit Identity Toolkit requests.
 
 Set `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY` in the Render service's environment. Keep the private key only in Render or an ignored local `.env`, with newlines represented as `\n` if needed. The Render blueprint declares these as unsynced secrets. Do not put service-account JSON or private keys in the repository or `public/`.
 
