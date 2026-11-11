@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Learn Python one missing piece at a time with lacuna.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#fbd9c9">
+  <title>Python lesson — lacuna</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="css/lacuna.css">
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/validate.js"></script>
+  <script defer src="js/api.js"></script>
+  <script defer src="js/player.js"></script>
+</head>
+<body class="player-page">
+  <header class="player-header">
+    <a class="wordmark" href="index.html" aria-label="lacuna home">lacuna<span aria-hidden="true"></span></a>
+    <nav id="step-progress" class="step-progress" aria-label="Lesson progress"></nav>
+    <div class="course-pill"><span id="course-title">Python basics</span><span aria-hidden="true"> · </span><span id="save-status" role="status" aria-live="polite">Saved on this device</span></div>
+  </header>
+
+  <main id="player" class="player-layout" aria-busy="true">
+    <aside class="note-card">
+      <p class="note-eyebrow">One small idea</p>
+      <h1 id="lesson-title">Loading lesson…</h1>
+      <p id="lesson-note"></p>
+      <span id="step-count" class="note-tag"></span>
+    </aside>
+
+    <section class="work-area" aria-label="Practice this Python step">
+      <div id="code-panel" class="code-panel" aria-label="Python code"></div>
+      <div id="step-work" class="step-work">
+        <h2 class="sr-only">Choose the missing piece</h2>
+        <div id="choices" class="choices" role="group" aria-label="Choose the missing piece"></div>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+        <div id="type-area" class="type-area" hidden>
+          <label id="type-label" for="answer-input">Correct. Now type it yourself.</label>
+          <input id="answer-input" class="answer-input" type="text" inputmode="text" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+          <p id="copy-answer" class="copy-answer"></p>
+          <div class="helper-keys" aria-label="Python helper keys">
+            <button type="button" data-key="&quot;" aria-label="Insert double quote">"</button>
+            <button type="button" data-key="'" aria-label="Insert single quote">'</button>
+            <button type="button" data-key="(" aria-label="Insert open parenthesis">(</button>
+            <button type="button" data-key=")" aria-label="Insert close parenthesis">)</button>
+            <button type="button" data-key="[" aria-label="Insert open bracket">[</button>
+            <button type="button" data-key="]" aria-label="Insert close bracket">]</button>
+            <button type="button" data-key="{" aria-label="Insert open brace">{</button>
+            <button type="button" data-key="}" aria-label="Insert close brace">}</button>
+            <button type="button" data-key=":" aria-label="Insert colon">:</button>
+            <button type="button" data-key="=" aria-label="Insert equals sign">=</button>
+            <button type="button" data-key="," aria-label="Insert comma">,</button>
+            <button type="button" data-key="." aria-label="Insert period">.</button>
+            <button type="button" data-key="+" aria-label="Insert plus sign">+</button>
+            <button type="button" data-key="-" aria-label="Insert minus sign">-</button>
+            <button type="button" data-key="*" aria-label="Insert asterisk">*</button>
+            <button type="button" data-key="/" aria-label="Insert slash">/</button>
+            <button type="button" data-key="#" aria-label="Insert hash">#</button>
+          </div>
+          <div class="type-actions">
+            <button id="show-answer" class="text-button" type="button" hidden>Show me</button>
+            <button id="check-answer" class="button button-primary" type="button">Check</button>
+          </div>
+        </div>
+        <div id="output-panel" class="output-panel">
+          <span class="output-label">OUTPUT SO FAR</span>
+          <pre id="step-output">Your program's output will grow here.</pre>
+        </div>
+      </div>
+      <section id="complete-panel" class="complete-panel" hidden>
+        <div class="complete-stamp">Lesson complete</div>
+        <h2>You wrote a working program.</h2>
+        <p id="complete-copy"></p>
+        <button id="run-program" class="button button-primary" type="button">Run program</button>
+        <button id="replay-lesson" class="text-button" type="button">Replay lesson</button>
+        <div id="final-output-panel" class="output-panel final-output" hidden>
+          <span class="output-label">OUTPUT</span>
+          <pre id="final-output"></pre>
+        </div>
+        <a id="next-lesson" class="button button-primary" href="index.html">Back to lessons</a>
+      </section>
+    </section>
+  </main>
+
+  <footer class="player-footer">
+    <button id="footer-hint" class="text-button" type="button">Hint</button>
+    <div class="footer-actions">
+      <button id="continue-step" class="button button-primary" type="button" hidden>Continue</button>
+      <button id="try-again" class="button button-primary" type="button" hidden>Try again</button>
+      <button id="next-step" class="button button-primary" type="button" hidden>Continue</button>
+      <a id="next-lesson-footer" class="button button-primary" href="index.html" hidden>Next lesson</a>
+    </div>
+  </footer>
+  <script src="config.js"></script>
+</body>
+</html>

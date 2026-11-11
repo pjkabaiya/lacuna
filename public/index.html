@@ -1,223 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Track the No Nut November countdown with a live timer, community quotes, and anonymous quote submissions.">
-<link rel="canonical" href="https://nonutnovember-sable.vercel.app/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="No Nut November">
-<meta property="og:title" content="No Nut November Countdown">
-<meta property="og:description" content="Track the No Nut November countdown with a live timer, community quotes, and anonymous quote submissions.">
-<meta property="og:url" content="https://nonutnovember-sable.vercel.app/">
-<meta property="og:image" content="https://nonutnovember-sable.vercel.app/icon.jpg">
-<meta property="og:image:alt" content="Orange shield with a flame on a dark background">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="No Nut November Countdown">
-<meta name="twitter:description" content="Track the No Nut November countdown with a live timer, community quotes, and anonymous quote submissions.">
-<meta name="twitter:image" content="https://nonutnovember-sable.vercel.app/icon.jpg">
-<title>No Nut November Countdown | Live Timer &amp; Community Quotes</title>
-<link rel="icon" type="image/jpeg" href="icon.jpg">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "No Nut November",
-  "url": "https://nonutnovember-sable.vercel.app/",
-  "description": "Track the No Nut November countdown with a live timer, community quotes, and anonymous quote submissions."
-}
-</script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-E7ZH65EL7N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-E7ZH65EL7N');
-</script>
-<style>
-:root{--bg:#0e1116;--card:#171b23;--text:#f2f4f8;--muted:#8b93a3;--accent:#ff6b35;--accent2:#ffb347;--line:#262c38;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f4ef;--card:#fff;--text:#161a22;--muted:#6a7282;--line:#e4e0d6}}
-:root[data-theme="dark"]{--bg:#0e1116;--card:#171b23;--text:#f2f4f8;--muted:#8b93a3;--line:#262c38}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
-main{max-width:720px;margin:0 auto;padding:32px 20px 48px;text-align:center}
-h1{font-size:clamp(28px,7vw,44px);margin:8px 0 4px;letter-spacing:-.02em}
-h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--muted);margin:0 0 28px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 4px}
-.num{font-size:clamp(28px,8vw,48px);font-weight:800;font-variant-numeric:tabular-nums}
-.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin:24px 0 6px}
-.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s}
-.small{font-size:13px;color:var(--muted)}
-.live{display:inline-flex;align-items:center;gap:8px;margin:26px 0 22px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-size:14px}
-.dot{width:9px;height:9px;border-radius:50%;background:#2ecc71;animation:p 1.6s infinite}
-@keyframes p{50%{opacity:.3}}
-.quote{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;min-height:130px;display:flex;flex-direction:column;justify-content:center;gap:10px;transition:opacity .4s}
-.quote.fade{opacity:0}
-.quote p{margin:0;font-size:clamp(18px,4.5vw,24px);line-height:1.4;font-weight:600}
-.quote small{color:var(--muted)}
-.sec{margin-top:34px;text-align:left}
-.sec h2{font-size:18px;margin:0 0 12px}
-form{display:grid;gap:10px}
-input,textarea{width:100%;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit}
-.row{display:flex;gap:8px}
-button{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:0;border-radius:10px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer}
-button.alt{background:var(--card);color:var(--text);border:1px solid var(--line);white-space:nowrap}
-button:disabled{opacity:.5}
-.msg{font-size:13px;min-height:18px;color:var(--muted)}
-.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.item p{margin:0 0 4px}.item small{color:var(--muted)}
-.ad{margin-top:32px;border:1px dashed var(--line);border-radius:12px;padding:14px;color:var(--muted);font-size:12px;display:none}
-footer{margin-top:28px;font-size:12px;color:var(--muted)}
-</style>
-</head>
-<body>
-<main>
-  <div class="small">NOVEMBER CHALLENGE</div>
-  <h1>No Nut <span>November</span></h1>
-  <p class="sub" id="status">Loading…</p>
-
-  <div class="grid" aria-live="off">
-    <div class="box"><div class="num" id="d">0</div><div class="lbl">Days</div></div>
-    <div class="box"><div class="num" id="h">0</div><div class="lbl">Hours</div></div>
-    <div class="box"><div class="num" id="m">0</div><div class="lbl">Min</div></div>
-    <div class="box"><div class="num" id="s">0</div><div class="lbl">Sec</div></div>
-  </div>
-  <div class="bar"><i id="fill"></i></div>
-  <div class="small" id="pct"></div>
-
-  <div class="live"><span class="dot"></span><span id="live">1 person here now</span></div>
-
-  <div class="quote" id="q"><p id="qt"></p><small id="qa"></small></div>
-
-  <section class="sec">
-    <h2>Share a quote anonymously</h2>
-    <form id="f">
-      <div class="row"><input id="name" maxlength="20" placeholder="Anonymous name (optional)"><button type="button" class="alt" id="rnd">Random name</button></div>
-      <textarea id="text" rows="3" maxlength="200" placeholder="Write something that helps others stay strong (5 to 200 characters)"></textarea>
-      <button id="send" type="submit">Post quote</button>
-      <div class="msg" id="msg"></div>
-    </form>
-  </section>
-  <section class="sec">
-    <h2>From the community</h2>
-    <div id="feed" class="small">Loading…</div>
-  </section>
-
-  <div class="ad" id="ad">Ad space</div>
-  <footer>Stay strong. Stay focused. One day at a time.</footer>
-</main>
-
-<script src="config.js"></script>
-<script>
-const quotes=[
-["Discipline is choosing between what you want now and what you want most.","Abraham Lincoln (attrib.)"],
-["You don’t have to be extreme, just consistent.","Unknown"],
-["The urge passes. Your progress doesn’t.","Unknown"],
-["Strength grows in the moments when you think you can’t go on but keep going anyway.","Unknown"],
-["Small daily wins build unstoppable momentum.","Unknown"],
-["Self-control is strength. Calmness is mastery.","Unknown"],
-["Every day you hold the line, you become harder to break.","Unknown"],
-["Motivation gets you started. Habit keeps you going.","Jim Ryun"],
-["Don’t count the days. Make the days count.","Muhammad Ali"],
-["The pain of discipline is far less than the pain of regret.","Unknown"],
-["Win the morning, win the day.","Unknown"],
-["Go outside, move your body, change the channel in your head.","Unknown"]
-];
-const $=id=>document.getElementById(id);
-const y=new Date().getFullYear();
-const start=new Date(y,10,1), end=new Date(y+ (new Date().getMonth()===11?1:0),11,1);
-const realStart=new Date(end.getFullYear(),10,1);
-const pad=n=>String(n).padStart(2,"0");
-
-function tick(){
-  const now=new Date();
-  const s=new Date(end.getFullYear(),10,1), e=new Date(end.getFullYear(),11,1);
-  let target,label;
-  if(now<s){target=s;label="Challenge starts in"}
-  else if(now<e){target=e;label="Time left in the challenge"}
-  else{
-    $("status").textContent="Challenge complete! You made it. See you next November.";
-    ["d","h","m","s"].forEach(i=>$(i).textContent="0");
-    $("fill").style.width="100%";$("pct").textContent="100% complete";return;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Learn Python one missing piece at a time. Read a note, choose the right code, then type it yourself.">
+  <link rel="canonical" href="SITE_URL/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="lacuna">
+  <meta property="og:title" content="lacuna — learn to code, one line at a time">
+  <meta property="og:description" content="Short notes, one missing piece per line. Pick it, type it, and watch your first programs run.">
+  <meta property="og:url" content="SITE_URL/">
+  <meta property="og:image" content="SITE_URL/icon.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="lacuna — learn to code, one line at a time">
+  <meta name="twitter:description" content="Short notes, one missing piece per line. Pick it, type it, and watch your first programs run.">
+  <meta name="twitter:image" content="SITE_URL/icon.svg">
+  <meta name="theme-color" content="#fbd9c9">
+  <title>lacuna — learn to code, one line at a time</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="css/lacuna.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "lacuna",
+    "url": "SITE_URL/",
+    "description": "Learn Python one missing piece at a time."
   }
-  const diff=Math.max(0,target-now);
-  $("d").textContent=Math.floor(diff/864e5);
-  $("h").textContent=pad(Math.floor(diff/36e5)%24);
-  $("m").textContent=pad(Math.floor(diff/6e4)%60);
-  $("s").textContent=pad(Math.floor(diff/1e3)%60);
-  $("status").textContent=label;
-  const p=now<s?0:Math.min(100,(now-s)/(e-s)*100);
-  $("fill").style.width=p.toFixed(1)+"%";
-  $("pct").textContent=p.toFixed(0)+"% complete";
-}
-tick();setInterval(tick,1000);
+  </script>
+  <script defer src="js/storage.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body class="home-page">
+  <header class="site-header">
+    <a class="wordmark" href="index.html" aria-label="lacuna home">lacuna<span aria-hidden="true"></span></a>
+    <a class="header-link" href="#lessons">Pick up learning</a>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A gentler way to begin</p>
+        <h1>Read code first.<br>Write it second.</h1>
+        <p class="hero-description">Short notes, one missing piece per line. Pick it, type it, and watch your first programs run. No setup, no blank page.</p>
+        <a class="button button-primary hero-button" href="#lessons">Start Python, free</a>
+      </div>
+      <div class="hero-code" aria-label="Example Python program">
+        <div class="sample-line"><span class="line-number">1</span><code><b>print</b>(<span class="sample-blank">"Hello"</span>)</code></div>
+        <div class="sample-line"><span class="line-number">2</span><code>Hello</code></div>
+      </div>
+    </section>
 
-// Rotating quotes
-let qi=Math.floor(Math.random()*quotes.length);
-function showQuote(){
-  const q=$("q");q.classList.add("fade");
-  setTimeout(()=>{
-    $("qt").textContent="“"+quotes[qi][0]+"”";
-    $("qa").textContent="— "+quotes[qi][1];
-    qi=(qi+1)%quotes.length;q.classList.remove("fade");
-  },400);
-}
-showQuote();setInterval(showQuote,9000);
+    <section class="how-grid" aria-label="How lacuna works">
+      <article class="how-card"><span class="step-number">1</span><div><h2>Read the note</h2><p>One idea at a time, in plain words.</p></div></article>
+      <article class="how-card"><span class="step-number">2</span><div><h2>Pick the missing piece</h2><p>Choose from three options. Wrong ones are real beginner mistakes.</p></div></article>
+      <article class="how-card"><span class="step-number">3</span><div><h2>Type it in</h2><p>Write the right answer yourself so it sticks.</p></div></article>
+    </section>
 
-// ---- Community: live count, feed, posting ----
-const API=window.API_BASE||"/api";
-const adj=["Calm","Brave","Steady","Iron","Quiet","Bold","Focused","Rising"],noun=["Wolf","Falcon","Monk","Oak","Tiger","Comet","Knight","Anchor"];
-const rnd=()=>adj[Math.random()*adj.length|0]+noun[Math.random()*noun.length|0]+(10+Math.random()*90|0);
-$("rnd").onclick=()=>{$("name").value=rnd()};
-let myId;try{myId=sessionStorage.getItem("nnn")||("v"+Math.random().toString(36).slice(2,12)+Date.now().toString(36));sessionStorage.setItem("nnn",myId)}catch(e){myId="v"+Math.random().toString(36).slice(2,14)}
-
-async function ping(){
-  try{
-    const r=await fetch(API+"/ping",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:myId})});
-    const {online}=await r.json();
-    $("live").textContent=online+(online===1?" person":" people")+" here now";
-  }catch(e){}
-}
-ping();setInterval(()=>{if(!document.hidden)ping()},30000);
-
-async function loadFeed(){
-  try{
-    const r=await fetch(API+"/quotes");const {quotes:list}=await r.json();
-    const feed=$("feed");feed.textContent="";
-    if(!list.length){feed.textContent="No community quotes yet. Be the first!";return}
-    list.slice(0,15).forEach(q=>{
-      const d=document.createElement("div");d.className="item";
-      const p=document.createElement("p");p.textContent="“"+q.text+"”";
-      const sm=document.createElement("small");sm.textContent="— "+q.name;
-      d.append(p,sm);feed.append(d);
-    });
-    // mix community quotes into the rotating banner
-    list.forEach(q=>{if(!quotes.some(x=>x[0]===q.text))quotes.push([q.text,q.name])});
-  }catch(e){$("feed").textContent="Couldn’t load quotes right now."}
-}
-loadFeed();setInterval(loadFeed,60000);
-
-$("f").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const btn=$("send"),msg=$("msg");btn.disabled=true;msg.textContent="Posting…";
-  try{
-    const r=await fetch(API+"/quotes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:$("name").value,text:$("text").value})});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||"Something went wrong");
-    msg.textContent=d.status==="pending"?"Thanks "+d.name+"! Your quote will appear after review.":"Posted as "+d.name+". Thank you!";
-    $("text").value="";loadFeed();
-  }catch(err){msg.textContent=err.message}
-  btn.disabled=false;
-});
-</script>
+    <section id="lessons" class="lesson-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">Start here</p><h2>Your Python path</h2></div>
+        <p id="progress-summary" class="progress-summary" aria-live="polite">A few minutes is a great start.</p>
+      </div>
+      <div id="lesson-list" class="lesson-list" aria-live="polite">
+        <p class="muted">Loading your lessons…</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>lacuna</span><span>Made for curious beginners.</span></footer>
 </body>
 </html>
