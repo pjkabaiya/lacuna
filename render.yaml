@@ -4,19 +4,17 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install
+    buildCommand: npm install && npm run validate:lessons
     startCommand: npm start
     healthCheckPath: /healthz
     envVars:
       - key: MONGODB_URI
         sync: false
       - key: DB_NAME
-        value: nonutnovember
+        value: lacuna
       - key: IP_SALT
         generateValue: true
       - key: ADMIN_KEY
         generateValue: true
-      - key: REQUIRE_APPROVAL
-        value: "true"
       - key: CORS_ORIGIN
         sync: false

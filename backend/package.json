@@ -1,11 +1,13 @@
 {
-  "name": "no-nut-november",
+  "name": "lacuna",
   "version": "1.0.0",
   "private": true,
-  "description": "Anonymous No Nut November countdown with live visitors and community quotes",
+  "description": "A line-by-line coding practice site for beginners",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "validate:lessons": "node ../tools/validate-lessons.js",
+    "test": "node --test"
   },
   "dependencies": {
     "express": "^4.21.2",
